@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-
 	"github.com/MehdiEidi/goshell/commands"
 	"github.com/MehdiEidi/goshell/utils"
+	"log"
+	"os"
 )
+
+const currentPath = "/home/mehdi/Workspace"
 
 func main() {
 	wd, err := os.Getwd()
@@ -31,9 +32,14 @@ func main() {
 			commands.Exit()
 
 		default:
-			if utils.Contains(in, ">") {
+			switch {
+			case utils.Contains(in, ">"):
+				ExecRedirect(in)
 
-			} else {
+			case utils.Contains(in, "|"):
+				ExecPipe(in)
+
+			default:
 				Exec(in, concurrent)
 			}
 		}
