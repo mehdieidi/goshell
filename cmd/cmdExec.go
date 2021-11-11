@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -60,58 +61,37 @@ func ExecRedirect(in []string) {
 	}
 }
 
-//func ExecPipe(in []string) {
-//	receiver := in[len(in)-1]
-//	in = utils.CleanupIn(in)
-//
-//	srcCmd := exec.Command(in[0], in[1:]...)
-//	stdout, err := srcCmd.StdoutPipe()
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//
-//	rcvCmd := exec.Command(receiver)
-//	stdin, err := rcvCmd.StdinPipe()
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//
-//	if err = srcCmd.Run(); err != nil {
-//		fmt.Println(err)
-//	}
-//	if _, err = io.Copy(stdin, stdout); err != nil {
-//		fmt.Println(err)
-//	}
-//	if err = rcvCmd.Run(); err != nil {
-//		fmt.Println(err)
-//	}
-//}
-
+// ExecPipe executes command in[0] with args in[1:]... and pipes its output to command receiver (in[len(in)-1]).
 func ExecPipe(in []string) {
 	receiver := in[len(in)-1]
 	in = utils.CleanupIn(in)
 
 	srcCmd := exec.Command(in[0], in[1:]...)
-	//stdout, err := srcCmd.StdoutPipe()
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
 	rcvCmd := exec.Command(receiver)
-	stdin, err := rcvCmd.StdinPipe()
-	if err != nil {
+
+	r, w := io.Pipe()
+	srcCmd.Stdout = w
+	rcvCmd.Stdin = r
+
+	var b bytes.Buffer
+	rcvCmd.Stdout = &b
+
+	if err := srcCmd.Start(); err != nil {
 		fmt.Println(err)
 	}
-
-	srcCmd.Start()
-	str, _ := srcCmd.Output()
-	fmt.Fprintln(stdin, string(str))
-
-	rcvCmd.Start()
-	str, _ = rcvCmd.Output()
-	fmt.Fprintln(os.Stdout, string(str))
-
-	srcCmd.Wait()
-	//rcvCmd.Wait()
-
+	if err := rcvCmd.Start(); err != nil {
+		fmt.Println(err)
+	}
+	if err := srcCmd.Wait(); err != nil {
+		fmt.Println(err)
+	}
+	if err := w.Close(); err != nil {
+		fmt.Println(err)
+	}
+	if err := rcvCmd.Wait(); err != nil {
+		fmt.Println(err)
+	}
+	if _, err := io.Copy(os.Stdout, &b); err != nil {
+		fmt.Println(err)
+	}
 }
