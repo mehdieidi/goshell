@@ -10,8 +10,8 @@ import (
 	"github.com/MehdiEidi/goshell/utils"
 )
 
-// Exec executes the command in[0]. in[1]... are args.
-// concurrent says whether we must block the parent process until child process joins it, or it must continue concurrently.
+// Exec executes the command in[0]. in[1:]... are args.
+// Concurrent says whether we must block the parent process until child process joins it, or it must continue concurrently.
 func Exec(in []string, concurrent bool) {
 	cmd := exec.Command(in[0], in[1:]...)
 	cmd.Stdout = os.Stdout
@@ -30,7 +30,7 @@ func Exec(in []string, concurrent bool) {
 	}
 }
 
-// ExecRedirect executes the command in[0] with args in[1]...
+// ExecRedirect executes the command in[0] with args in[1:]...
 // and redirects the output to the file specified after > operator.
 func ExecRedirect(in []string) {
 	filename := in[len(in)-1]
@@ -46,12 +46,12 @@ func ExecRedirect(in []string) {
 		fmt.Println(err)
 	}
 
-	file, err := os.OpenFile(currentPath+"/"+filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
+	file, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if _, err := io.Copy(io.MultiWriter(file, os.Stdout), cmdStdout); err != nil {
+	if _, err := io.Copy(file, cmdStdout); err != nil {
 		fmt.Println(err)
 	}
 
@@ -61,7 +61,8 @@ func ExecRedirect(in []string) {
 	}
 }
 
-// ExecPipe executes command in[0] with args in[1:]... and pipes its output to command receiver (in[len(in)-1]).
+// ExecPipe executes command in[0] with args in[1:]...
+// and pipes its output to receiver command (in[len(in)-1]).
 func ExecPipe(in []string) {
 	receiver := in[len(in)-1]
 	in = utils.CleanupIn(in)
@@ -91,6 +92,7 @@ func ExecPipe(in []string) {
 	if err := rcvCmd.Wait(); err != nil {
 		fmt.Println(err)
 	}
+
 	if _, err := io.Copy(os.Stdout, &b); err != nil {
 		fmt.Println(err)
 	}

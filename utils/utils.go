@@ -16,6 +16,8 @@ func Contains(s []string, k string) bool {
 	return false
 }
 
+// CleanupIn deletes suffix operator and operand.
+// operators available: >, <, |
 func CleanupIn(in []string) []string {
 	return in[:len(in)-2]
 }
@@ -24,5 +26,5 @@ func CleanupIn(in []string) []string {
 func GetIn() []string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	return strings.Fields(strings.TrimSuffix(scanner.Text(), "\n"))
+	return strings.Fields(scanner.Text())
 }

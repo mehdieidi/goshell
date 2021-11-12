@@ -3,44 +3,22 @@ package commands
 import (
 	"fmt"
 	"os"
-	"strings"
 )
 
-// CD is the implementation of famous cd command.
+// CD is the implementation of the thefamous cd command.
 // returns changed working directory.
 func CD(in []string, wd string) string {
-	var newPath string
-
-	switch {
-	case len(in) == 1:
-		newPath = "/home/mehdi"
-
-	case len(in) > 1:
-		switch {
-		case in[1] == "..":
-			pd := strings.Split(wd, "/")
-			pd = pd[:len(pd)-1]
-			newPath = strings.Join(pd, "/")
-
-		case in[1] == "~":
-			newPath = "/home/mehdi"
-
-		default:
-			// relative or absolute path
-			if in[1][0] != '/' {
-				newPath = wd + "/" + in[1]
-			} else {
-				newPath = in[1]
-			}
-		}
+	// empty cd command
+	if len(in) == 1 {
+		in = append(in, "/home/mehdi")
 	}
 
-	// Changing working directory
-	err := os.Chdir(newPath)
+	// Change working directory
+	err := os.Chdir(in[1])
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		wd = newPath
+		wd, _ = os.Getwd()
 	}
 
 	return wd
