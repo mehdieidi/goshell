@@ -6,7 +6,7 @@ import (
 	"os"
 	user2 "os/user"
 
-	"github.com/MehdiEidi/goshell/commands"
+	"github.com/MehdiEidi/goshell/exec"
 	"github.com/MehdiEidi/goshell/utils"
 )
 
@@ -44,10 +44,10 @@ func main() {
 
 		switch in[0] {
 		case "cd":
-			wd = commands.CD(in, wd)
+			wd = exec.CD(in, wd)
 
 		case "exit":
-			commands.Exit()
+			exec.Exit()
 
 		default:
 			switch {

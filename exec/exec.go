@@ -1,4 +1,5 @@
-package commands
+// Package exec runs various shell commands like cd
+package exec
 
 import (
 	"fmt"
