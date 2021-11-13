@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	user2 "os/user"
 
 	"github.com/MehdiEidi/goshell/commands"
 	"github.com/MehdiEidi/goshell/utils"
@@ -16,13 +17,25 @@ func main() {
 		log.Println(err)
 	}
 
+	// current user
+	user, err := user2.Current()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// machines name
+	host, err := os.Hostname()
+	if err != nil {
+		fmt.Println(host)
+	}
+
 	for {
-		fmt.Print(wd + " :$> ")
+		fmt.Print(red, user.Username+"@"+host+" ", blue, wd, yellow, " >>> ", cyan)
 
 		// get input command and args in a slice
 		in := utils.GetIn()
 
-		// && at the end of input represents that the new process must run concurrently with parent process.
+		// && at the end of the input represents that the new process must run concurrently with parent process.
 		var concurrent bool
 		if in[len(in)-1] == "&&" {
 			concurrent = true

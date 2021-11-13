@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -69,13 +68,11 @@ func ExecPipe(in []string) {
 
 	srcCmd := exec.Command(in[0], in[1:]...)
 	rcvCmd := exec.Command(receiver)
+	rcvCmd.Stdout = os.Stdout
 
 	r, w := io.Pipe()
 	srcCmd.Stdout = w
 	rcvCmd.Stdin = r
-
-	var b bytes.Buffer
-	rcvCmd.Stdout = &b
 
 	if err := srcCmd.Start(); err != nil {
 		fmt.Println(err)
@@ -90,10 +87,6 @@ func ExecPipe(in []string) {
 		fmt.Println(err)
 	}
 	if err := rcvCmd.Wait(); err != nil {
-		fmt.Println(err)
-	}
-
-	if _, err := io.Copy(os.Stdout, &b); err != nil {
 		fmt.Println(err)
 	}
 }
