@@ -7,5 +7,5 @@ A terminal shell for Unix like operating systems.
 * Concurrent and Synchronized execution
 * Output redirection (input, output)
 * Piping
-* direction change command
-* neat UI
+* CD command
+* Neat UI
