@@ -30,7 +30,7 @@ func main() {
 	}
 
 	for {
-		fmt.Print(red, user.Username+"@"+host+" ", blue, wd, yellow, " >>> ", reset)
+		fmt.Print(red, user.Username+"@"+host+" ", blue, wd, yellow, " >>> ", cyan)
 
 		// get input command and args in a slice
 		in := utils.GetIn()
