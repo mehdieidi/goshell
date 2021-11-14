@@ -9,3 +9,7 @@ A shell for Unix like operating systems.
 * Piping
 * CD command
 * Neat UI
+
+### To do
+* Support for history navigation using arrow keys
+* Support for left and right traversing using arrow keys
