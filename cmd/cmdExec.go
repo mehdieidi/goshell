@@ -54,8 +54,7 @@ func ExecRedirect(in []string) {
 		fmt.Println(err)
 	}
 
-	err = file.Close()
-	if err != nil {
+	if err = file.Close(); err != nil {
 		fmt.Println(err)
 	}
 }
