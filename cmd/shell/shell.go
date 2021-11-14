@@ -13,15 +13,30 @@ import (
 
 // Start gets the config file and runs the shell.
 func Start(c config.Config) {
+	var history []string
+
 	for {
 		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
 
-		in := getIn()
-		if len(in) == 0 {
+		input := getIn()
+		if len(input) == 0 {
 			continue
 		}
 
-		in, concurrent := isConcurrent(in)
+		if input[0] != "!!" {
+			history = input
+		} else {
+			if len(input) == 0 {
+				fmt.Println("History is empty...")
+				continue
+			} else {
+				fmt.Println("Command ", history, " ran from history...")
+				fmt.Println("-----------------------------------------")
+				input = history
+			}
+		}
+
+		in, concurrent := isConcurrent(input)
 
 		switch in[0] {
 		case "cd":
