@@ -1,5 +1,5 @@
-// Package exec runs various shell commands like cd
-package exec
+// Package run runs various shell commands like cd
+package run
 
 import (
 	"fmt"

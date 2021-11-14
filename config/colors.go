@@ -1,4 +1,4 @@
-package main
+package config
 
 // ANSI escape codes for some colors.
 const (
