@@ -2,27 +2,30 @@
 package run
 
 import (
-	"fmt"
 	"os"
 )
 
-// CD is the implementation of the thefamous cd command.
-// returns changed working directory.
-func CD(in []string, wd string) string {
-	// empty cd command
-	if len(in) == 1 {
-		in = append(in, "/home/mehdi")
+// CD is the implementation of the famous cd command. Returns changed working directory.
+func CD(in []string, wd string) (string, error) {
+	// empty cd command or ~ indicates home
+	if len(in) == 1 || in[1] == "~" {
+		h, _ := os.UserHomeDir()
+		err := os.Chdir(h)
+		if err != nil {
+			return wd, err
+		}
+		return h, err
 	}
 
 	// Change working directory
 	err := os.Chdir(in[1])
 	if err != nil {
-		fmt.Println(err)
+		return wd, err
 	} else {
 		wd, _ = os.Getwd()
 	}
 
-	return wd
+	return wd, nil
 }
 
 // Exit just exits the program with exit code 0.

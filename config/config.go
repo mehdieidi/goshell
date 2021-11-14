@@ -6,19 +6,18 @@ import (
 	userPkg "os/user"
 )
 
-// Config contains some details about the host which will be used
-// in shell.
+// Config contains some details about the host which will be used in shell.
 type Config struct {
-	WD          string
-	Host        string
 	User        *userPkg.User
+	WD          string
+	Hostname    string
 	UserColor   string
 	PathColor   string
 	PromptColor string
 	ResetColor  string
 }
 
-// New returns a new Config value initialized with correct data. It also returns errors if any.
+// New returns a new Config value initialized with correct data. It also returns errors, if any.
 func New() (Config, error) {
 	// current working directory
 	wd, err := os.Getwd()
@@ -32,20 +31,20 @@ func New() (Config, error) {
 		return Config{}, err
 	}
 
-	// Host
-	host, err := os.Hostname()
+	// Hostname
+	hostname, err := os.Hostname()
 	if err != nil {
 		return Config{}, err
 	}
 
 	c := Config{
 		WD:          wd,
-		Host:        host,
+		Hostname:    hostname,
 		User:        user,
-		UserColor:   red,
-		PathColor:   blue,
-		PromptColor: yellow,
-		ResetColor:  reset,
+		UserColor:   RED,
+		PathColor:   BLUE,
+		PromptColor: YELLOW,
+		ResetColor:  RESET,
 	}
 
 	return c, nil

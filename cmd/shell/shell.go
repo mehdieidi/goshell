@@ -14,18 +14,22 @@ import (
 // Start gets the config file and runs the shell.
 func Start(c config.Config) {
 	for {
-		fmt.Print(c.UserColor, c.User.Username+"@"+c.Host+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
+		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
 
 		in := getIn()
 		if len(in) == 0 {
 			continue
 		}
 
-		concurrent := isConcurrent(in)
+		in, concurrent := isConcurrent(in)
 
 		switch in[0] {
 		case "cd":
-			c.WD = run.CD(in, c.WD)
+			w, err := run.CD(in, c.WD)
+			if err != nil {
+				fmt.Println(err)
+			}
+			c.WD = w
 
 		case "exit":
 			run.Exit()
@@ -67,15 +71,15 @@ func getIn() []string {
 	return strings.Fields(scanner.Text())
 }
 
-// isConcurrent returns true if the command in[0] supposed to run
-// concurrently with parent. && at the end of the command means that the command
-// must run concurrently. It also cleans the && from the in slice.
-func isConcurrent(in []string) bool {
+// isConcurrent returns true if the command in[0] is supposed to run concurrently with parent.
+// && at the end of the command means that the command must run concurrently.
+// It also cleans the && from the in slice and returns the clean slice.
+func isConcurrent(in []string) ([]string, bool) {
 	if in[len(in)-1] == "&&" {
 		in = in[:len(in)-1] // delete &&
-		return true
+		return in, true
 	}
-	return false
+	return in, false
 }
 
 // contains returns true if s contains k
