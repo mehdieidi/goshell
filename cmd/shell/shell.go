@@ -19,7 +19,7 @@ func Start(c config.Config) {
 		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
 
 		input := getIn()
-		if len(input) == 0 {
+		if len(input) == 0 || input[0] == "" {
 			continue
 		}
 
@@ -83,7 +83,7 @@ func Start(c config.Config) {
 func getIn() []string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	return strings.Fields(scanner.Text())
+	return strings.Split(scanner.Text(), " ")
 }
 
 // isConcurrent returns true if the command in[0] is supposed to run concurrently with parent.
