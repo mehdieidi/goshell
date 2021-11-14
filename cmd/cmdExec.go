@@ -15,6 +15,7 @@ func Exec(in []string, concurrent bool) {
 	cmd := exec.Command(in[0], in[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
 	var err error
 
@@ -57,6 +58,19 @@ func ExecRedirect(in []string) {
 	if err = file.Close(); err != nil {
 		fmt.Println(err)
 	}
+}
+
+func ExecInRedirect(in []string) {
+	filename := in[len(in)-1]
+	in = utils.CleanupIn(in)
+
+	f, _:= os.Open(filename)
+	defer f.Close()
+
+	cmd := exec.Command(in[0], in[1:]...)
+	cmd.Stdin = f
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }
 
 // ExecPipe executes command in[0] with args in[1:]...

@@ -34,6 +34,9 @@ func main() {
 
 		// get input command and args in a slice
 		in := utils.GetIn()
+		if len(in) == 0 {
+			continue
+		}
 
 		// && at the end of the input represents that the new process must run concurrently with parent process.
 		var concurrent bool
@@ -53,6 +56,9 @@ func main() {
 			switch {
 			case utils.Contains(in, ">"):
 				ExecRedirect(in)
+
+			case utils.Contains(in, "<"):
+				ExecInRedirect(in)
 
 			case utils.Contains(in, "|"):
 				ExecPipe(in)
