@@ -1,5 +1,5 @@
 # goshell
-A terminal shell for Unix like operating systems.
+A shell for Unix like operating systems.
 
 ![goshell](./img.png)
 
