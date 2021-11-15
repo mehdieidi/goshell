@@ -1,4 +1,4 @@
-// Package config initializes some data for shell.
+// Package config initializes some data for shell. e.g. username, colors, hostname...
 package config
 
 import (
@@ -6,7 +6,7 @@ import (
 	userPkg "os/user"
 )
 
-// Config contains some details about the host which will be used in shell.
+// Config contains some info that will be used in shell.
 type Config struct {
 	User        *userPkg.User
 	WD          string

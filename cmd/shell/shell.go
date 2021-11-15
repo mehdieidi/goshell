@@ -1,4 +1,4 @@
-// Package shell starts the shell.
+// Package shell starts the shell and gets commands.
 package shell
 
 import (
@@ -11,9 +11,9 @@ import (
 	"github.com/MehdiEidi/goshell/run"
 )
 
-// Start gets the config file and runs the shell.
+// Start gets the config file, runs the shell and gets commands.
 func Start(c config.Config) {
-	var history []string
+	var latestCmd []string
 
 	for {
 		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
@@ -23,24 +23,25 @@ func Start(c config.Config) {
 			continue
 		}
 
+		// handle history feature; !! means give me the latest cmd.
 		if input[0] != "!!" {
-			history = input
+			latestCmd = input
 		} else {
-			if len(input) == 0 {
+			if len(latestCmd) == 0 {
 				fmt.Println("History is empty...")
 				continue
 			} else {
-				fmt.Println("Command ", history, " ran from history...")
-				fmt.Println("-----------------------------------------")
-				input = history
+				fmt.Println("Command ", latestCmd, " ran from history...")
+				fmt.Println("-------------------------------------------")
+				input = latestCmd
 			}
 		}
 
-		in, concurrent := isConcurrent(input)
+		input, concurrent := isConcurrent(input)
 
-		switch in[0] {
+		switch input[0] {
 		case "cd":
-			w, err := run.CD(in, c.WD)
+			w, err := run.CD(input, c.WD)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -51,26 +52,26 @@ func Start(c config.Config) {
 
 		default:
 			switch {
-			case contains(in, ">"):
-				err := run.CmdRedirect(in, true)
+			case contains(input, ">"):
+				err := run.CmdRedirect(input, true)
 				if err != nil {
 					fmt.Println(err)
 				}
 
-			case contains(in, "<"):
-				err := run.CmdRedirect(in, false)
+			case contains(input, "<"):
+				err := run.CmdRedirect(input, false)
 				if err != nil {
 					fmt.Println(err)
 				}
 
-			case contains(in, "|"):
-				err := run.CmdPipe(in)
+			case contains(input, "|"):
+				err := run.CmdPipe(input)
 				if err != nil {
 					fmt.Println(err)
 				}
 
 			default:
-				err := run.Cmd(in, concurrent)
+				err := run.Cmd(input, concurrent)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -79,7 +80,7 @@ func Start(c config.Config) {
 	}
 }
 
-// getIn gets input, parses it, joins fields of input into a slice. in[0] is command, rest are args.
+// getIn gets input, parses it, joins fields of input into a slice.
 func getIn() []string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()

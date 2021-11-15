@@ -1,11 +1,11 @@
-// Package run runs various shell commands like cd
+// Package run executes various shell commands like cd.
 package run
 
 import (
 	"os"
 )
 
-// CD is the implementation of the famous cd command. Returns changed working directory.
+// CD is the implementation of the famous cd command. Returns changed working directory and error, if any.
 func CD(in []string, wd string) (string, error) {
 	// empty cd command or ~ indicates home
 	if len(in) == 1 || in[1] == "~" {
