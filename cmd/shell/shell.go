@@ -85,10 +85,14 @@ func Start(c config.Config) {
 func getIn() []string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
+	return clean(scanner.Text())
+}
 
+// clean cleans redundant whitespaces, parses the str into a clean slice.
+func clean(str string) []string {
 	ws := regexp.MustCompile(`\s+`)
 
-	str := strings.TrimSpace(scanner.Text())
+	str = strings.TrimSpace(str)
 	str = ws.ReplaceAllString(str, " ")
 
 	var in []string
@@ -99,7 +103,6 @@ func getIn() []string {
 		switch {
 		case q:
 			if r == '"' {
-				temp += string(r)
 				q = false
 				in = append(in, temp)
 				temp = ""
@@ -108,7 +111,6 @@ func getIn() []string {
 			temp += string(r)
 
 		case !q && r == '"':
-			temp += string(r)
 			q = true
 
 		case r == ' ':
