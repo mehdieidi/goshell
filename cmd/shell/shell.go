@@ -48,6 +48,9 @@ func Start(c config.Config) {
 			}
 			c.WD = w
 
+		case "help":
+			run.Help()
+		
 		case "exit":
 			run.Exit()
 

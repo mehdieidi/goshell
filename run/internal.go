@@ -2,6 +2,7 @@
 package run
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -31,4 +32,10 @@ func CD(in []string, wd string) (string, error) {
 // Exit just exits the program with exit code 0.
 func Exit() {
 	os.Exit(0)
+}
+
+
+// Help displays a help text which explains the internal commands of the shell.
+func Help() {
+	fmt.Println("cd -> change directory\nexit -> exit shell\nhelp -> display help")
 }
