@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/MehdiEidi/goshell/config"
@@ -84,7 +85,42 @@ func Start(c config.Config) {
 func getIn() []string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	return strings.Split(scanner.Text(), " ")
+
+	ws := regexp.MustCompile(`\s+`)
+
+	str := strings.TrimSpace(scanner.Text())
+	str = ws.ReplaceAllString(str, " ")
+
+	var in []string
+	var temp string
+	var q bool
+
+	for _, r := range str {
+		if q {
+			if r == '"' {
+				temp += string(r)
+				q = false
+				in = append(in, temp)
+				temp = ""
+				continue
+			}
+			temp += string(r)
+		} else if !q && r == '"' {
+			temp += string(r)
+			q = true
+		} else if r == ' ' {
+			in = append(in, temp)
+			temp = ""
+		} else {
+			temp += string(r)
+		}
+	}
+
+	if len(temp) != 0 {
+		in = append(in, temp)
+	}
+
+	return in
 }
 
 // isConcurrent returns true if the command in[0] is supposed to run concurrently with parent.

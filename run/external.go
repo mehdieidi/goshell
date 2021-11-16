@@ -70,11 +70,10 @@ func CmdRedirect(in []string, output bool) error {
 
 // CmdPipe executes command in[0] with args in[1:]... and pipes its output to receiver command (in[len(in)-1]).
 func CmdPipe(in []string) error {
-	receiver := in[len(in)-1]
-	in = cleanUp(in)
+	rcv, in := extractRcv(in)
 
 	srcCmd := exec.Command(in[0], in[1:]...)
-	rcvCmd := exec.Command(receiver)
+	rcvCmd := exec.Command(rcv[0], rcv[1:]...)
 	rcvCmd.Stdout = os.Stdout
 	srcCmd.Stdin = os.Stdin
 
@@ -104,4 +103,20 @@ func CmdPipe(in []string) error {
 // cleanUp deletes suffix operator and operand. operators available: >, <, |
 func cleanUp(in []string) []string {
 	return in[:len(in)-2]
+}
+
+// extractRcv parses the input slice, extracts the receiver command and cleans the in slice.
+// returns receiver command slice and cleaned input slice.
+func extractRcv(in []string) ([]string, []string) {
+	var r []string
+
+	for i, v := range in {
+		if v == "|" {
+			r = in[i+1:]
+			in = in[:i]
+			break
+		}
+	}
+
+	return r, in
 }
