@@ -1,0 +1,5 @@
+.
+..
+a.txt
+main.go
+shell
