@@ -96,7 +96,8 @@ func getIn() []string {
 	var q bool
 
 	for _, r := range str {
-		if q {
+		switch {
+		case q:
 			if r == '"' {
 				temp += string(r)
 				q = false
@@ -105,13 +106,16 @@ func getIn() []string {
 				continue
 			}
 			temp += string(r)
-		} else if !q && r == '"' {
+
+		case !q && r == '"':
 			temp += string(r)
 			q = true
-		} else if r == ' ' {
+
+		case r == ' ':
 			in = append(in, temp)
 			temp = ""
-		} else {
+
+		default:
 			temp += string(r)
 		}
 	}
