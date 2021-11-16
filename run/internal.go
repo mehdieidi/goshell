@@ -13,15 +13,15 @@ func CD(in []string, wd string) (string, error) {
 		h, _ := os.UserHomeDir()
 		err := os.Chdir(h)
 		if err != nil {
-			return wd, err
+			return wd, fmt.Errorf("chdir() failed: %w", err)
 		}
-		return h, err
+		return h, nil
 	}
 
 	// Change working directory
 	err := os.Chdir(in[1])
 	if err != nil {
-		return wd, err
+		return wd, fmt.Errorf("chdir() failed: %w", err)
 	} else {
 		wd, _ = os.Getwd()
 	}
@@ -33,7 +33,6 @@ func CD(in []string, wd string) (string, error) {
 func Exit() {
 	os.Exit(0)
 }
-
 
 // Help displays a help text which explains the internal commands of the shell.
 func Help() {

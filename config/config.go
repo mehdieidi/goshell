@@ -2,6 +2,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	userPkg "os/user"
 )
@@ -22,19 +23,19 @@ func New() (Config, error) {
 	// current working directory
 	wd, err := os.Getwd()
 	if err != nil {
-		return Config{}, err
+		return Config{}, fmt.Errorf("getwd() failed: %w", err)
 	}
 
 	// current User
 	user, err := userPkg.Current()
 	if err != nil {
-		return Config{}, err
+		return Config{}, fmt.Errorf("user.Current() failed: %w", err)
 	}
 
 	// Hostname
 	hostname, err := os.Hostname()
 	if err != nil {
-		return Config{}, err
+		return Config{}, fmt.Errorf("hostname() failed: %w", err)
 	}
 
 	c := Config{

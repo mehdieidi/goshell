@@ -50,7 +50,7 @@ func Start(c config.Config) {
 
 		case "help":
 			run.Help()
-		
+
 		case "exit":
 			run.Exit()
 

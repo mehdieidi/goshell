@@ -1,6 +1,7 @@
 package run
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -35,33 +36,33 @@ func CmdRedirect(in []string, output bool) error {
 	if output {
 		cmdStdout, err := cmd.StdoutPipe()
 		if err != nil {
-			return err
+			return fmt.Errorf("stdoutPipe() failed: %w", err)
 		}
 
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 		if err != nil {
-			return err
+			return fmt.Errorf("redirect openFile failed: %w", err)
 		}
 		defer file.Close()
 
 		if err := cmd.Start(); err != nil {
-			return err
+			return fmt.Errorf("cmd.Start() failed: %w", err)
 		}
 
 		if _, err := io.Copy(file, cmdStdout); err != nil {
-			return err
+			return fmt.Errorf("io.Copy() failed: %w", err)
 		}
 	} else {
 		file, err := os.Open(filename)
 		if err != nil {
-			return err
+			return fmt.Errorf("redirect open() failed: %w", err)
 		}
 		defer file.Close()
 
 		cmd.Stdin = file
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
-			return err
+			return fmt.Errorf("cmd.Run() failed: %w", err)
 		}
 	}
 
@@ -82,19 +83,19 @@ func CmdPipe(in []string) error {
 	rcvCmd.Stdin = r
 
 	if err := srcCmd.Start(); err != nil {
-		return err
+		return fmt.Errorf("srcCmd.Start() failed: %w", err)
 	}
 	if err := rcvCmd.Start(); err != nil {
-		return err
+		return fmt.Errorf("rcvCmd.Start() failed: %w", err)
 	}
 	if err := srcCmd.Wait(); err != nil {
-		return err
+		return fmt.Errorf("srcCmd.Wait() failed: %w", err)
 	}
 	if err := w.Close(); err != nil {
-		return err
+		return fmt.Errorf("w.Close() failed: %w", err)
 	}
 	if err := rcvCmd.Wait(); err != nil {
-		return err
+		return fmt.Errorf("rcvCmd.Wait() failed: %w", err)
 	}
 
 	return nil
