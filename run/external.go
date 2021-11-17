@@ -46,7 +46,7 @@ func CmdRedirect(in []string, output bool) error {
 		defer file.Close()
 
 		if err := cmd.Start(); err != nil {
-			return fmt.Errorf("cmd.Start() failed: %w", err)
+			return err
 		}
 
 		if _, err := io.Copy(file, cmdStdout); err != nil {
@@ -62,7 +62,7 @@ func CmdRedirect(in []string, output bool) error {
 		cmd.Stdin = file
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
-			return fmt.Errorf("cmd.Run() failed: %w", err)
+			return err
 		}
 	}
 
@@ -83,19 +83,19 @@ func CmdPipe(in []string) error {
 	rcvCmd.Stdin = r
 
 	if err := srcCmd.Start(); err != nil {
-		return fmt.Errorf("srcCmd.Start() failed: %w", err)
+		return err
 	}
 	if err := rcvCmd.Start(); err != nil {
-		return fmt.Errorf("rcvCmd.Start() failed: %w", err)
+		return err
 	}
 	if err := srcCmd.Wait(); err != nil {
-		return fmt.Errorf("srcCmd.Wait() failed: %w", err)
+		return err
 	}
 	if err := w.Close(); err != nil {
-		return fmt.Errorf("w.Close() failed: %w", err)
+		return err
 	}
 	if err := rcvCmd.Wait(); err != nil {
-		return fmt.Errorf("rcvCmd.Wait() failed: %w", err)
+		return err
 	}
 
 	return nil

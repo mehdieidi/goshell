@@ -13,7 +13,7 @@ func CD(in []string, wd string) (string, error) {
 		h, _ := os.UserHomeDir()
 		err := os.Chdir(h)
 		if err != nil {
-			return wd, fmt.Errorf("chdir() failed: %w", err)
+			return wd, err
 		}
 		return h, nil
 	}
@@ -21,7 +21,7 @@ func CD(in []string, wd string) (string, error) {
 	// Change working directory
 	err := os.Chdir(in[1])
 	if err != nil {
-		return wd, fmt.Errorf("chdir() failed: %w", err)
+		return wd, err
 	} else {
 		wd, _ = os.Getwd()
 	}
