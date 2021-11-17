@@ -93,16 +93,16 @@ func getIn() []string {
 
 // clean cleans redundant whitespaces, parses the str into a clean slice.
 func clean(str string) []string {
-	ws := regexp.MustCompile(`\s+`)
-
+	// cleaning redundant whitespaces
 	str = strings.TrimSpace(str)
+	ws := regexp.MustCompile(`\s+`)
 	str = ws.ReplaceAllString(str, " ")
 
 	var in []string
 	var temp string
 	var q bool
 
-	// handling text in ""
+	// extracting words, handles text in "" too.
 	for _, r := range str {
 		switch {
 		case q && r == '"':
