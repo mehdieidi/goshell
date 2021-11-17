@@ -102,6 +102,7 @@ func clean(str string) []string {
 	var temp string
 	var q bool
 
+	// handling text in ""
 	for _, r := range str {
 		switch {
 		case q:
