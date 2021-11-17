@@ -105,19 +105,15 @@ func clean(str string) []string {
 	// handling text in ""
 	for _, r := range str {
 		switch {
-		case q:
-			if r == '"' {
-				q = false
-				in = append(in, temp)
-				temp = ""
-				continue
-			}
-			temp += string(r)
+		case q && r == '"':
+			q = false
+			in = append(in, temp)
+			temp = ""
 
 		case !q && r == '"':
 			q = true
 
-		case r == ' ':
+		case !q && r == ' ':
 			in = append(in, temp)
 			temp = ""
 
