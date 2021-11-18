@@ -32,7 +32,7 @@ func Start(c config.Config) {
 				fmt.Println("History is empty...")
 				continue
 			} else {
-				fmt.Println("Command ", latestCmd, " ran from history...")
+				fmt.Println("Command ", latestCmd, " from history...")
 				fmt.Println("-------------------------------------------")
 				input = latestCmd
 			}
