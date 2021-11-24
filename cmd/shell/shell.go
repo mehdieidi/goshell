@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/MehdiEidi/goshell/command"
 	"github.com/MehdiEidi/goshell/config"
-	"github.com/MehdiEidi/goshell/run"
 )
 
 // Start gets the config file, runs the shell and gets commands.
@@ -42,40 +42,43 @@ func Start(c config.Config) {
 
 		switch input[0] {
 		case "cd":
-			w, err := run.CD(input, c.WD)
+			w, err := command.CD(input, c.WD)
 			if err != nil {
 				fmt.Println(err)
 			}
 			c.WD = w
 
 		case "help":
-			run.Help()
+			command.Help()
+
+		case "about":
+			command.About()
 
 		case "exit":
-			run.Exit()
+			command.Exit()
 
 		default:
 			switch {
 			case contains(input, ">"):
-				err := run.CmdRedirect(input, true)
+				err := command.CmdRedirect(input, true)
 				if err != nil {
 					fmt.Println(err)
 				}
 
 			case contains(input, "<"):
-				err := run.CmdRedirect(input, false)
+				err := command.CmdRedirect(input, false)
 				if err != nil {
 					fmt.Println(err)
 				}
 
 			case contains(input, "|"):
-				err := run.CmdPipe(input)
+				err := command.CmdPipe(input)
 				if err != nil {
 					fmt.Println(err)
 				}
 
 			default:
-				err := run.Cmd(input, concurrent)
+				err := command.Cmd(input, concurrent)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -129,8 +132,8 @@ func clean(str string) []string {
 	return in
 }
 
-// isConcurrent returns true if the command in[0] is supposed to run concurrently with parent.
-// && at the end of the command means that the command must run concurrently.
+// isConcurrent returns true if the command in[0] is supposed to command concurrently with parent.
+// && at the end of the command means that the command must command concurrently.
 // It also cleans the && from the in slice and returns the clean slice.
 func isConcurrent(in []string) ([]string, bool) {
 	if in[len(in)-1] == "&&" {
