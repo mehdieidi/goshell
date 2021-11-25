@@ -35,27 +35,16 @@ func CmdRedirect(in []string, output bool) error {
 	cmd := exec.Command(in[0], in[1:]...)
 
 	if output {
-		cmdStdout, err := cmd.StdoutPipe()
-		if err != nil {
-			return fmt.Errorf("stdoutPipe() failed: %w", err)
-		}
-
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 		if err != nil {
 			return fmt.Errorf("redirect openFile failed: %w", err)
 		}
 		defer file.Close()
 
-		if err := cmd.Start(); err != nil {
-			return err
-		}
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = file
 
-		if _, err := io.Copy(file, cmdStdout); err != nil {
-			return fmt.Errorf("io.Copy() failed: %w", err)
-
-		}
-
-		if err := cmd.Wait(); err != nil {
+		if err := cmd.Run(); err != nil {
 			return err
 		}
 	} else {

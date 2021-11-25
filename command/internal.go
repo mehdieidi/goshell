@@ -38,7 +38,7 @@ func Exit() {
 
 // Help displays a help text which explains the internal commands of the shell.
 func Help() {
-	fmt.Println("goshell\n-------\ncd -> change directory\nexit -> exit shell\nhelp -> display help\nabout -> display about")
+	fmt.Println("goshell v1.0\n-------\ncd -> change directory\nexit -> exit shell\nhelp -> display help\nabout -> display about")
 }
 
 // About just prints a nice info about the shell and authors.
@@ -48,7 +48,7 @@ func About() {
   x      x   x     x   x  x x   x   x
   x  xxx x   x     xxx xxxx xxx x   x
   x    x x   x       x x  x x   x   x
-  xxxxxx xxxxx     xxx x  x xxx xxx xxx
+  xxxxxx xxxxx     xxx x  x xxx xxx xxx	V1.0
   ─────────────────────────────────────
 `, config.YELLOW, `
   Authors:`, config.CYAN, `
