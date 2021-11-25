@@ -53,6 +53,6 @@ func About() {
 `, config.YELLOW, `
   Authors:`, config.CYAN, `
   * Mehdi Eidi (mehdiadq@gmail.com)
-  * Reyhaneh MehdiGholizadeh ()
+  * Reyhaneh MehdiGholizadeh (rmg62333@gmail.com)
   `, config.RESET)
 }

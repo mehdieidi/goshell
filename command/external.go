@@ -19,6 +19,7 @@ func Cmd(in []string, concurrent bool) error {
 
 	if concurrent {
 		err = cmd.Start()
+		go cmd.Wait() // to avoid leaving zombies
 	} else {
 		err = cmd.Run()
 	}
