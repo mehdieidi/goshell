@@ -51,6 +51,11 @@ func CmdRedirect(in []string, output bool) error {
 
 		if _, err := io.Copy(file, cmdStdout); err != nil {
 			return fmt.Errorf("io.Copy() failed: %w", err)
+
+		}
+
+		if err := cmd.Wait(); err != nil {
+			return err
 		}
 	} else {
 		file, err := os.Open(filename)
