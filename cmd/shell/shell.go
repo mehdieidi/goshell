@@ -17,7 +17,7 @@ func Start(c config.Config) {
 	var latestCmd []string
 
 	for {
-		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+" ", c.PathColor, c.WD, c.PromptColor, " >>> ", c.ResetColor)
+		fmt.Print(c.UserColor, c.User.Username+"@"+c.Hostname+":", c.PathColor, c.WD, c.PromptColor, "$ ", c.ResetColor)
 
 		input := getIn()
 		if len(input) == 0 || input[0] == "" {

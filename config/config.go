@@ -43,7 +43,7 @@ func New() (Config, error) {
 		Hostname:    hostname,
 		User:        user,
 		UserColor:   RED,
-		PathColor:   BLUE,
+		PathColor:   CYAN,
 		PromptColor: YELLOW,
 		ResetColor:  RESET,
 	}
