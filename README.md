@@ -1,7 +1,7 @@
 # goshell
 A shell for Unix like operating systems.
 
-![goshell](./screenshot.png)
+![goshell](./sc.png)
 
 ### Features
 * Concurrent and Synchronized process execution
