@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 
@@ -14,6 +15,11 @@ import (
 
 // Start gets the config file, runs the shell and gets commands.
 func Start(c config.Config) {
+	// cleaning the terminal
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+
 	var latestCmd []string
 
 	for {
