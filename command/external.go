@@ -102,7 +102,7 @@ func cleanUp(in []string) []string {
 }
 
 // extractRcv parses the input slice, extracts the receiver command and cleans the in slice.
-// returns receiver command slice and cleaned input slice.
+// returns receiver command and cleaned input.
 func extractRcv(in []string) ([]string, []string) {
 	var r []string
 
